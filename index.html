@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
     
+    <link rel="icon" href="icon.png" type="image/png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,8 +19,7 @@
     <div id="intro-overlay" class="intro-overlay">
         <div class="particles-bg"></div>
         <header class="intro-header">
-            <div class="intro-brand"><span class="gold-dot"></span> MALLIFY · PRE-LAUNCH</div>
-            <button class="skip-btn" onclick="skipIntro()">SKIP INTRO &rarr;</button>
+            <div class="intro-brand"><span class="gold-dot"></span>PRE-LAUNCH</div>
         </header>
         <div class="intro-center">
             <h1 id="intro-text" class="intro-text">Every app changed convenience.</h1>
@@ -37,6 +37,10 @@
     <section class="hero-section">
         <div class="particles-bg"></div>
         <div class="hero-content">
+            <button id="unmute-btn" class="unmute-btn" onclick="initAudio()" style="display: none;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                Tap to Unmute
+            </button>
             <span class="eyebrow" style="margin-bottom: 2rem;">T - M I N U S &nbsp; T O &nbsp; R E V E A L</span>
             
             <h1 class="hero-headline">The world is <span class="gold-text">about to change</span><br>the way it visits the mall.</h1>
@@ -64,43 +68,35 @@
 
             <p class="hero-desc">Be among the first to witness the future.</p>
 
-            <button class="launch-btn" onclick="scrollToFeatures()">Launch Experience &rarr;</button>
+            <button class="launch-btn" onclick="initAudio(); scrollToFeatures();">Launch Experience &rarr;</button>
 
             <span class="target-date">T A R G E T &nbsp;&middot;&nbsp; J U N E &nbsp; 2 1 &nbsp;&middot;&nbsp; 2 0 2 6</span>
         </div>
         </div>
     </section>
 
-    <!-- Loading Animation Overlay -->
-    <div id="loading-overlay" class="loading-overlay">
-        <div class="particles-bg"></div>
-        <div class="intro-line"></div>
-        <div class="solar-system">
-            <div class="center-sphere"></div>
-            <div class="orbit-ring ring-1"></div>
-            
-            <div class="emit-container">
-                <div class="emit-wrapper w-1"><div class="emit-dot"></div></div>
-                <div class="emit-wrapper w-2"><div class="emit-dot"></div></div>
-                <div class="emit-wrapper w-3"><div class="emit-dot"></div></div>
-                <div class="emit-wrapper w-4"><div class="emit-dot"></div></div>
-                <div class="emit-wrapper w-5"><div class="emit-dot"></div></div>
-                <div class="emit-wrapper w-6"><div class="emit-dot"></div></div>
-                <div class="emit-wrapper w-7"><div class="emit-dot"></div></div>
-                <div class="emit-wrapper w-8"><div class="emit-dot"></div></div>
-            </div>
-        </div>
+    <!-- Cracker & Countdown Overlay -->
+    <div id="cracker-overlay" class="cracker-overlay">
+        <div id="countdown-text" class="countdown-text"></div>
+        <canvas id="firework-canvas" class="firework-canvas"></canvas>
     </div>
+
 
     <!-- Video Page -->
     <div id="video-page" class="video-page">
         <div class="particles-bg"></div>
-        <div class="video-container">
-            <button class="play-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <h2 class="video-title">Brand Reveal Film</h2>
-            <p class="video-subtitle">VIDEO PLACEHOLDER - 16:9</p>
+        <div class="video-container" style="position: relative;">
+            <iframe id="yt-player" src="https://www.youtube.com/embed/Wyy51Zttbwg?enablejsapi=1&playsinline=1&controls=1&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; inset: 0; border-radius: 20px; overflow: hidden; opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 5; border: none; width: 100%; height: 100%;"></iframe>
+            
+            <div class="video-placeholder" style="position: relative; z-index: 10;">
+                <button class="play-btn" onclick="playVideo()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <h2 class="video-title">Brand Reveal Film</h2>
+                <p class="video-subtitle">VIDEO PLACEHOLDER - 16:9</p>
+            </div>
+            
+            <button class="skip-video-btn" onclick="skipToFeatures()" style="display: none; position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%); background: transparent; border: 1px solid #d4af37; color: #d4af37; padding: 0.8rem 2rem; border-radius: 50px; cursor: pointer; transition: background 0.3s, color 0.3s; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; z-index: 20;" onmouseover="this.style.background='#d4af37'; this.style.color='#000';" onmouseout="this.style.background='transparent'; this.style.color='#d4af37';">Skip Video &rarr;</button>
         </div>
     </div>
 
@@ -109,7 +105,7 @@
         <div class="particles-bg"></div>
         <div class="features-header">
             <span class="eyebrow" style="margin-bottom: 2rem;">I N T R O D U C I N G</span>
-            <h1 class="features-logo">Mallify</h1>
+            <img src="logo.png" alt="Mallify" class="features-logo" style="display: block; margin: 0 auto 1.5rem auto; max-width: 300px; height: auto;">
             <p class="features-tagline">One Mall. One App. Infinite Experiences.</p>
             <p class="platform-text">WORLD'S FIRST CONNECTED MALL PLATFORM</p>
         </div>
@@ -173,6 +169,15 @@
 
         <p class="ecosystem-text">Complete mall ecosystem. One ambient interface. Every visit, elevated.</p>
 
+        <div class="certificate-section">
+            <h2 class="form-title" style="margin-bottom: 1rem;">Claim Your <span class="gold-text">Launch Certificate</span></h2>
+            <p class="form-desc" style="margin-bottom: 2rem;">Commemorate your attendance at the world premiere of Mallify.</p>
+            <div class="cert-form-row">
+                <input type="text" id="cert-name" placeholder="Your Full Name">
+                <button onclick="generateCertificate()" class="submit-btn">Download &rarr;</button>
+            </div>
+        </div>
+
         <div class="form-card">
             <span class="eyebrow form-eyebrow">G E T &nbsp; E A R L Y &nbsp; A C C E S S</span>
             <h2 class="form-title">Join the <span class="gold-text">revolution.</span></h2>
@@ -205,7 +210,7 @@
             <p class="footer-copyright">&copy; 2026 MALLIFY &bull; A NEW CATEGORY OF EXPERIENCE</p>
         </div>
     </div>
-
+    <script src="cert_data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
