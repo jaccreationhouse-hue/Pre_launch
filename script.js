@@ -576,8 +576,12 @@ async function submitJoinForm(event) {
     submitBtn.innerHTML = "Joining... &rarr;";
     submitBtn.disabled = true;
 
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+        ? 'http://localhost:3000'
+        : 'https://pre-launch-6qcg.onrender.com';
+
     try {
-        const response = await fetch('http://localhost:3000/api/join', {
+        const response = await fetch(`${API_BASE_URL}/api/join`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
